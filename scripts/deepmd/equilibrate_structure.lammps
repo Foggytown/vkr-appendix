@@ -1,0 +1,29 @@
+units metal
+boundary p p p
+atom_style atomic
+
+read_data ../../../data_diff_types/recolours/lammps_Al490_Cu10_Ni10.data
+replicate 2 2 2
+
+group Al type 1
+group Cu type 2
+group Ni type 3
+
+mass 1 27
+mass 2 63.5
+mass 3 58.7
+
+
+pair_style deepmd models/graph-compress-centre.pb
+pair_coeff * *
+
+thermo 10
+
+reset_timestep 0
+timestep 0.001
+
+velocity all create 1673 4928459 rot yes dist gaussian
+fix nvt all nvt temp 1673 1673 0.1
+run 10000
+
+write_data equilibrated_data/equilibrated_al490cu10ni10.data
